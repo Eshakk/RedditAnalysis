@@ -56,6 +56,7 @@ for dateItem in date_list:
     r=requests.get(url)
     web_data=r.content
     soup=BeautifulSoup(web_data,"html.parser")
+    print (dateItem)
 
 #with open('sample.txt', mode='r',encoding="utf_8") as myfile:
 #    data=myfile.read()
