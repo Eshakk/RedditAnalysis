@@ -25,7 +25,7 @@ date_list = []
 today = datetime.date.today()
 topList=[]
 d1 = date(2011,11,11)
-d2 = date(2013,12,31)
+d2 = date(2015,12,11)
 delta = d2 - d1
 
 for i in range(delta.days + 1):
@@ -85,8 +85,11 @@ for dateItem in date_list:
                     
                     unvoted=each_div.findAll("div",attrs={'class':'score unvoted'})
                     unvoted_text=unvoted[0].text
+
+                    title_text = title_text.replace('\n', ' ').replace('\r', ' ');
+                    cite_text = cite_text.replace('\n', ' ').replace('\r', ' ');
                     
-                    data=str(_archiveYear + "\t" + title_text+ "\t"+ comments_text+"\t"+unvoted_text+"\t"+cite_text+"\t"+subreddit_text)
+                    data=str(_archiveYear + "\t" + title_text + "\t"+ comments_text+"\t"+unvoted_text+"\t"+cite_text+"\t"+subreddit_text)
                     #print (dateItem)
                     #print(data)
                     topList.append(data)
@@ -100,7 +103,7 @@ for dateItem in date_list:
      
     r.close()
     #If file size is greater than 50Mb open a new file
-    if os.stat(prevFileStamp).st_size>6553600:
+    if os.stat(prevFileStamp).st_size>10485760:
             print("Opening new file \n")
             prevFileStamp="output_"+str(calendar.timegm(time.gmtime()))+".txt";
             
@@ -113,7 +116,3 @@ for dateItem in date_list:
                 print("ERROR: Could not write this line", e);
            
     topList.clear()    
-   
-            
-    
-                
