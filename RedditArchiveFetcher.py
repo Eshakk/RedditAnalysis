@@ -15,32 +15,31 @@ import time
 import logging
 import datetime
 from datetime import date,timedelta as td
+import sys
+
 #December+10,+2015
 date_list = []
 today = datetime.date.today()
 topList=[]
-d1 = date(2015,12,10)
-d2 = date(2015,12,12)
+d1 = date(2011,11,11)
+d2 = date(2013,12,31)
 delta = d2 - d1
 
 for i in range(delta.days + 1):
     fetch_date=(d1 + td(days=i)).strftime('%B+%d,+%Y')
-    date_list.append(fetch_date)
+    fetch_year=(d1 + td(days=i)).strftime('%Y')
+    tmp=fetch_date + "|" + fetch_year
+    date_list.append(tmp)
     
 #print(len(date_list))
-
-
-
-
-
 
 logging.basicConfig(level=logging.DEBUG,
                     format='%(asctime)s %(levelname)-8s %(message)s',
                     datefmt='%a, %d %b %Y %H:%M:%S',
-                    filename='R:\CreativeChaos\Twentyment\TRACE_LOG.log',
+                    filename='TRACE_LOG.log',
                     filemode='w')
 
-prevFileStamp="R:\CreativeChaos\Twentyment\output_"+ str(calendar.timegm(time.gmtime()))+".txt";
+prevFileStamp="output_"+ str(calendar.timegm(time.gmtime()))+".txt";
 with open(prevFileStamp,"w") as x:
     x.write("\n");
     x.close()
@@ -48,13 +47,12 @@ with open(prevFileStamp,"w") as x:
 for dateItem in date_list:    
     sleep(5)
     #Read from the URL and log
-    url='http://www.redditarchive.com/?d='+dateItem
+    _archiveDate = dateItem.split('|')[0]
+    _archiveYear = dateItem.split('|')[1]
+    url='http://www.redditarchive.com/?d='+_archiveDate
     r=requests.get(url)
     web_data=r.content
     soup=BeautifulSoup(web_data,"html.parser")
-            
-
-
 
 #with open('sample.txt', mode='r',encoding="utf_8") as myfile:
 #    data=myfile.read()
@@ -65,16 +63,12 @@ for dateItem in date_list:
             
             for post in posts:
                 each_div=post.findAll("div")[0]
-                
-                
                 try: 
-                    
                     title=each_div.findAll("a",attrs={'class':'i_title'})
                     title_text=title[0].text
                     
                     cite=each_div.findAll('cite')
                     subreddit=str(cite[0].find("a"))
-                    
                                        
                     i=subreddit.find("/r")
                     index=subreddit.find("/",i+3)
@@ -88,34 +82,31 @@ for dateItem in date_list:
                     unvoted=each_div.findAll("div",attrs={'class':'score unvoted'})
                     unvoted_text=unvoted[0].text
                     
-                    
-                    data=str(title_text+ "\t"+ comments_text+"\t"+unvoted_text+"\t"+cite_text+"\t"+subreddit_text)
-                    print(data)
+                    data=str(_archiveYear + "\t" + title_text+ "\t"+ comments_text+"\t"+unvoted_text+"\t"+cite_text+"\t"+subreddit_text)
+                    #print (dateItem)
+                    #print(data)
                     topList.append(data)
                 except:
                     print("Failed")               
                 
-                
-                
-                
-                #print(title_text)
-                
-    except Exception as e:
-        print("Failed")
+    except:
+        e = sys.exc_info()[0]
+        print("Failed", e)
         
      
     r.close()
     #If file size is greater than 50Mb open a new file
     if os.stat(prevFileStamp).st_size>6553600:
             print("Opening new file \n")
-            prevFileStamp="R:\CreativeChaos\Twentyment\output_"+str(calendar.timegm(time.gmtime()))+".txt";
+            prevFileStamp="output_"+str(calendar.timegm(time.gmtime()))+".txt";
             
     with open(prevFileStamp, "a") as myfile:
         for item in topList:
             try:
                 myfile.write("%s\n" % item)
             except:
-                print("ERROR: Could not write this line");
+                e = sys.exc_info()[0]
+                print("ERROR: Could not write this line", e);
            
     topList.clear()    
    
