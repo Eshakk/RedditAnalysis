@@ -1,7 +1,10 @@
 '''
+
+Reddit archive fetcher
+
 Created on Dec 12, 2015
 
-@author: Prashanth
+@author: Prashanth, Eshak, Dheeraj
 '''
 import re
 from bs4 import BeautifulSoup
