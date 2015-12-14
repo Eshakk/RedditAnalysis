@@ -24,14 +24,16 @@ import sys
 date_list = []
 today = datetime.date.today()
 topList=[]
-d1 = date(2011,11,11)
-d2 = date(2015,12,11)
+# year,month,date
+d1 = date(2011,11,1)
+d2 = date(2015,12,13)
 delta = d2 - d1
 
 for i in range(delta.days + 1):
     fetch_date=(d1 + td(days=i)).strftime('%B+%d,+%Y')
     fetch_year=(d1 + td(days=i)).strftime('%Y')
-    tmp=fetch_date + "|" + fetch_year
+    full_fetch_date = (d1 + td(days=i)).strftime('%Y-%d-%B')
+    tmp=fetch_date + "|" + fetch_year + "|" + full_fetch_date
     date_list.append(tmp)
     
 #print(len(date_list))
@@ -48,10 +50,11 @@ with open(prevFileStamp,"w") as x:
     x.close()
 
 for dateItem in date_list:    
-    sleep(5)
+    sleep(2)
     #Read from the URL and log
     _archiveDate = dateItem.split('|')[0]
     _archiveYear = dateItem.split('|')[1]
+    _archiveFullDate = dateItem.split('|')[2]
     url='http://www.redditarchive.com/?d='+_archiveDate
     r=requests.get(url)
     web_data=r.content
@@ -87,23 +90,25 @@ for dateItem in date_list:
                     unvoted_text=unvoted[0].text
 
                     title_text = title_text.replace('\n', ' ').replace('\r', ' ');
+                    title_text = title_text.replace('\t', ' ');
                     cite_text = cite_text.replace('\n', ' ').replace('\r', ' ');
                     
-                    data=str(_archiveYear + "\t" + title_text + "\t"+ comments_text+"\t"+unvoted_text+"\t"+cite_text+"\t"+subreddit_text)
-                    #print (dateItem)
+                    data=str(_archiveYear + "\t" + _archiveFullDate + "\t" + title_text + "\t"+ comments_text+"\t"+unvoted_text+"\t"+cite_text+"\t"+subreddit_text)
+                    print (_archiveFullDate)
                     #print(data)
                     topList.append(data)
                 except:
-                    print("Failed")               
+                    e = sys.exc_info()[0]
+                    print("Failed ", e)
                 
     except:
         e = sys.exc_info()[0]
-        print("Failed", e)
+        print("Failed ", e)
         
      
     r.close()
-    #If file size is greater than 50Mb open a new file
-    if os.stat(prevFileStamp).st_size>10485760:
+    #If file size is greater than 25MB open a new file
+    if os.stat(prevFileStamp).st_size>26214400:
             print("Opening new file \n")
             prevFileStamp="output_"+str(calendar.timegm(time.gmtime()))+".txt";
             
@@ -113,6 +118,6 @@ for dateItem in date_list:
                 myfile.write("%s\n" % item)
             except:
                 e = sys.exc_info()[0]
-                print("ERROR: Could not write this line", e);
+                print("ERROR: Could not write this line ", e);
            
-    topList.clear()    
+    topList.clear()
