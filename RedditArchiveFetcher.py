@@ -59,7 +59,7 @@ for dateItem in date_list:
     r=requests.get(url)
     web_data=r.content
     soup=BeautifulSoup(web_data,"html.parser")
-    print (dateItem)
+    print (_archiveFullDate)
 
 #with open('sample.txt', mode='r',encoding="utf_8") as myfile:
 #    data=myfile.read()
@@ -94,7 +94,7 @@ for dateItem in date_list:
                     cite_text = cite_text.replace('\n', ' ').replace('\r', ' ');
                     
                     data=str(_archiveYear + "\t" + _archiveFullDate + "\t" + title_text + "\t"+ comments_text+"\t"+unvoted_text+"\t"+cite_text+"\t"+subreddit_text)
-                    print (_archiveFullDate)
+                    #print (_archiveFullDate)
                     #print(data)
                     topList.append(data)
                 except:
