@@ -1,8 +1,10 @@
 /* database creation */
 create database if not exists r_db;
 
-create table if not exists all_threads(id int not null auto_increment,
+create table if not exists all_threads(
+    id int not null auto_increment,
     year int not null,
+    full_date_string varchar(25) not null,
     title varchar(500) not null,
     num_of_comments int not null,
     num_of_upvotes int not null,
@@ -15,4 +17,4 @@ create table if not exists all_threads(id int not null auto_increment,
       partition p2 values less than (2013),
       partition p3 values less than (2014),
       partition p4 values less than (2015),
-    partition p5 values less than (MAXVALUE));
+      partition p5 values less than (MAXVALUE));
