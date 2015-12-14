@@ -1,5 +1,7 @@
 #!/usr/bin/python
 
+__Vrasinavaru__='Eshak'
+
 import sys
 import mysql.connector
 from nltk.sentiment.vader import SentimentIntensityAnalyzer

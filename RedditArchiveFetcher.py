@@ -41,7 +41,7 @@ for i in range(delta.days + 1):
 logging.basicConfig(level=logging.DEBUG,
                     format='%(asctime)s %(levelname)-8s %(message)s',
                     datefmt='%a, %d %b %Y %H:%M:%S',
-                    filename='TRACE_LOG.log',
+                    filename='output/TRACE_LOG.log',
                     filemode='w')
 
 prevFileStamp="output_"+ str(calendar.timegm(time.gmtime()))+".txt";
@@ -110,7 +110,7 @@ for dateItem in date_list:
     #If file size is greater than 25MB open a new file
     if os.stat(prevFileStamp).st_size>26214400:
             print("Opening new file \n")
-            prevFileStamp="output_"+str(calendar.timegm(time.gmtime()))+".txt";
+            prevFileStamp="output/output_"+str(calendar.timegm(time.gmtime()))+".txt";
             
     with open(prevFileStamp, "a") as myfile:
         for item in topList:
