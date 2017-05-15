@@ -11,7 +11,7 @@ outStr = ""
 currIndex = 0
 
 try:
-    conn = mysql.connector.connect(user='r_acc', password='rsjeejsr', host='127.0.0.1', database='r_db')
+    conn = mysql.connector.connect(user='r_acc', password='test', host='127.0.0.1', database='r_db')
 
     cursor = conn.cursor()
 
