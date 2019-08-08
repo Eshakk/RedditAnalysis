@@ -11,7 +11,7 @@ from nltk.corpus import stopwords
 import heapq
 import nltk
 
-cnx = mysql.connector.connect(user="r_acc",password="rsjeejsr",host="127.0.0.1",database="r_db")
+cnx = mysql.connector.connect(user="r_acc",password="test",host="127.0.0.1",database="r_db")
 cursor = cnx.cursor()
 query = 'select distinct(subreddit) from all_threads'
 cursor.execute(query);
@@ -40,7 +40,7 @@ def remove_adjectives(words):
         if(i[1] not in ['DT','JJ','RB']):
             print ("Stupid dheeraj")
 
-cnx = mysql.connector.connect(user="r_acc",password="rsjeejsr",host="127.0.0.1",database="r_db")
+cnx = mysql.connector.connect(user="r_acc",password="test",host="127.0.0.1",database="r_db")
 cursor = cnx.cursor()
 for i in subreddit_topics:
     query = 'select title from all_threads where subreddit = "' + str(i) + '";'
